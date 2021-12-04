@@ -46,7 +46,7 @@ public class User extends Player{
         for(Card card: this.hand)
             System.out.print(card.getValue()+card.getColor()+" ");
         do {
-            System.out.println("\nWrite bid (It has to be higher than actual and multiple of 10) or 0 if you want to pass");
+            System.out.println("\nWrite bid (It has to be higher then actual and multiple of 10) or 0 if you want to pass");
             bid = scanner.next();
             message = "Write only numbers and without spaces!";
             correctNum = isBidGood(bid, message, actualBid);
@@ -112,8 +112,8 @@ public class User extends Player{
         do {
             System.out.println();
             this.showHand();
-            System.out.println("Write bid (It has to be equal or higher than actual and multiple of 10) or 0 if you want to pass:");
-            System.out.println("If 0 passes left and write 0, then u go actual bid");
+            System.out.println("Write bid (It has to be equal or higher then actual and multiple of 10) or 0 if you want to pass:");
+            System.out.println("If there are 0 passes left and write 0, then u go actual bid");
             System.out.println("Passes left: "+(1-this.surrenders));
             bid = scanner.next();
             message = "Write only numbers and without spaces!";
