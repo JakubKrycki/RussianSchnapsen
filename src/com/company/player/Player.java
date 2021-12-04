@@ -20,7 +20,6 @@ public abstract class Player {
 
     public abstract Card makeMove(char marriage, List<Card> cardTrash, Card cardOnTable);
     public abstract void askForBid(int actualBid);
-    public abstract boolean checkIfMarriage(Card card);
     public abstract int sumCards();
     public abstract List<Card> give2Cards();
     public abstract int changeBid();
@@ -68,12 +67,69 @@ public abstract class Player {
         }
     }
 
+    public int inColor(Card cardOnTable){
+        int index=-1;
+        for(int i=0 ; i<this.hand.size() ; i++){
+            Card card = this.hand.get(i);
+            if(card.getColor() == cardOnTable.getColor()){
+                if(index == -1)
+                    index = i;
+                else if(card.getPoints()>cardOnTable.getPoints()){
+                    if(card.getPoints()>this.hand.get(index).getPoints())
+                        index = i;
+                }else if(this.hand.get(index).getPoints()<cardOnTable.getPoints() && card.getPoints()<this.hand.get(index).getPoints()){
+                    index = i;
+                }
+            }
+        }
+        return index;
+    }
+
     public void showHand(){
         System.out.print(this.username + ": ");
         for(Card card: this.hand){
             System.out.print(card.getValue()+card.getColor()+" ");
         }
         System.out.print("\n");
+    }
+
+    public boolean checkIfMarriage(Card card){
+        if(card.getValue().equals("K")){
+            for(Card actual: this.hand) {
+                if (actual.getValue().equals("Q") && actual.getColor() == card.getColor()) {
+                    this.wonPoints+=card.getMarriagePoints();
+                    return true;
+                }
+            }
+        }else if(card.getValue().equals("Q")){
+            for(Card actual: this.hand){
+                if(actual.getValue().equals("K") && actual.getColor()==card.getColor()){
+                    this.wonPoints+=card.getMarriagePoints();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean ifMarriageInColor(char color, List<Card> hand){
+        for(int i=0 ; i<hand.size()-1 ; i++){
+            Card card1 = hand.get(i);
+            Card card2 = hand.get(i+1);
+            if(card1.getColor() == color && card1.getColor()==card2.getColor() && card1.getValue().equals("K") && card2.getValue().equals("Q"))
+                return true;
+        }
+        return false;
+    }
+
+    public int findNewMarriage(){//cards are sorted, that means Q is after K, so we have to check if actual card is K and next is Q and if they're in the same color
+        for(int i=0 ; i<this.hand.size()-1 ; i++){
+            Card card1 = this.hand.get(i);
+            Card card2 = this.hand.get(i+1);
+            if(card1.getColor()==card2.getColor() && card1.getValue().equals("K") && card2.getValue().equals("Q"))
+                return card1.getMarriagePoints();
+        }
+        return 0;
     }
 
     public List<Card> getHand(){
